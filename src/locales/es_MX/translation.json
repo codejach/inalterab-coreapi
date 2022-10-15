@@ -1,0 +1,10 @@
+{
+  "authentication_failed": "Authentication failed.",
+  "bad_request": "Bad request.",
+  "internal_error": "Internal error.",
+  "invalid_eth_address": "Invalid Ethereum address.",
+  "invalid_register": "Invalid register, try again.",
+  "unauthorized": "Unauthorized",
+  "user_authenticated": "User authenticated.",
+  "user_created": "User created."
+}

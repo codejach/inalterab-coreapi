@@ -1,0 +1,55 @@
+version: '2'
+
+volumes:
+  node-modules:
+    external: true
+  mongo-data:
+    external: true
+
+services:
+  base:
+    image: node:lts-alpine
+    working_dir: /usr/src/service
+    volumes:
+      - node-modules:/usr/src/service/node_modules
+      - .:/usr/src/service
+    depends_on:
+      - mongo
+      - mongo-express
+
+  mongo:
+    build: .
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: core-dev
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor 
+      MONGO_NON_ROOT_ROLE: readWrite
+      MONGO_NON_ROOT_USERNAME: user-dev 
+      MONGO_NON_ROOT_PASSWORD: password-dev
+
+  mongo-express:
+    image: mongo-express:0.54.0
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: toor
+      ME_CONFIG_MONGODB_URL: mongodb://root:toor@mongo:27017/
+
+  install:
+    extends:
+      service: base
+    command: npm install
+
+  build:
+    extends:
+      service: base
+    command: npm run build
+  create-bundles:
+    extends: 
+      service: base
+    command: npm run create-bundles

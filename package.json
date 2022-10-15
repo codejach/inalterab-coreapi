@@ -1,0 +1,46 @@
+{
+  "name": "axtechapi-core",
+  "version": "1.0.0",
+  "description": "REST API for axtech projects",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src --out-dir build",
+    "dev": "nodemon -r ./.env src/index.js --exec babel-node",
+    "start": "node build/index.js",
+    "test": "mocha ./test/user_test/ -g '/auth/signin|/user 200|/user 400|/user 400'",
+    "test_auth": "mocha ./test/auth_test",
+    "test_user": "mocha ./test/user_test"
+  },
+  "author": "Axuan <codejach@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0",
+    "express": "^4.17",
+    "helmet": "^5.0",
+    "i18next": "^21.6",
+    "i18next-fs-backend": "^1.1",
+    "i18next-http-middleware": "^3.2",
+    "import-modules": "^3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2",
+    "uuid": "^8.3",
+    "validatorjs": "^3.22"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17",
+    "@babel/core": "^7.17",
+    "@babel/node": "^7.16",
+    "@babel/preset-env": "^7.16",
+    "@eslint/create-config": "^0.1",
+    "chai": "^4.3",
+    "eslint": "^8.9",
+    "eslint-config-airbnb-base": "^15.0",
+    "eslint-plugin-import": "^2.25",
+    "mocha": "^9.2",
+    "morgan": "^1.10",
+    "nodemon": "^2.0",
+    "supertest": "^6.2"
+  }
+}

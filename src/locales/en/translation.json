@@ -1,0 +1,14 @@
+{
+  "authentication_failed": "Authentication failed.",
+  "bad_request": "Bad request.",
+  "internal_error": "Internal error.",
+  "invalid_eth_address": "Invalid ethereum address.",
+  "invalid_register": "Invalid register, try again.",
+  "unauthorized": "Unauthorized",
+  "user_authenticated": "User authenticated.",
+  "user_created": "User created.",
+  "user_deleted": "User deleted.",
+  "user_exists": "User already exists.",
+  "user_updated": "User updated.",
+  "user_doesnt_exist": "User does not exist."
+}
