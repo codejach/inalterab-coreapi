@@ -1,4 +1,4 @@
-import { exec as validate } from './base.validation';
+import ValidatorService from '../../services/validator';
 import cons from '../../locales/constants';
 
 /**
@@ -10,18 +10,22 @@ import cons from '../../locales/constants';
  * @return {Promise<object>} result  Result object
  */
 export const del = async (req, res, next) => {
-  // Parameters
-  const { id } = req.params;
-
-  const code = 400;
+  const validator = new ValidatorService(req, res);
   const message = req.t(cons.bad_request);
-  const messageValidation = null;
-  const params = { id };
   const rules = {
     id: 'required|hex|size:24'
   };
 
-  validate(req, res, params, rules, code, message, messageValidation, next);
+  validator.run(req.body, rules, {}, (err, status) => {
+    const result = err;
+    const code = 400;
+
+    if (!status) {
+      return Response.Error({ res, result, message, code });
+    } else {
+      next();
+    }
+  });
 }
 
 /**
@@ -45,10 +49,8 @@ export const get = async (_, __, next) => {
  * @return {Promise<object>} result  Result object
  */
 export const post = async (req, res, next) => {
-  const code = 400;
+  const validator = new ValidatorService(req, res);
   const message = req.t(cons.bad_request);
-  const messageValidation = null;
-  const params = req.body;
   const rules = {
     login: {
       account: 'required|email',
@@ -56,7 +58,16 @@ export const post = async (req, res, next) => {
     }
   };
 
-  validate(req, res, params, rules, code, message, messageValidation, next);
+  validator.run(req.body, rules, {}, (err, status) => {
+    const result = err;
+    const code = 400;
+
+    if (!status) {
+      return Response.Error({ res, result, message, code });
+    } else {
+      next();
+    }
+  });
 } 
 
 /**
@@ -68,10 +79,8 @@ export const post = async (req, res, next) => {
  * @return {Promise<object>} result  Result object
  */
 export const put = async (req, res,  next) => {
-  const code = 400;
+  const validator = new ValidatorService(req, res);
   const message = req.t(cons.bad_request);
-  const messageValidation = null;
-  const params = req.body;
   const rules = {
     nickname: 'string|min:3',
     login: {
@@ -79,7 +88,16 @@ export const put = async (req, res,  next) => {
     }
   };
 
-  validate(req, res, params, rules, code, message, messageValidation, next);
+  validator.run(req.body, rules, {}, (err, status) => {
+    const result = err;
+    const code = 400;
+
+    if (!status) {
+      return Response.Error({ res, result, message, code });
+    } else {
+      next();
+    }
+  });
 }
 
 /**
@@ -91,16 +109,20 @@ export const put = async (req, res,  next) => {
  * @return {Promise<object>} result  Result object
  */
 export const getId = async (req, res, next) => {
-  // Parameters
-  const { id } = req.params;
-
-  const code = 400;
+  const validator = new ValidatorService(req, res);
   const message = req.t(cons.bad_request);
-  const messageValidation = null;
-  const params = { id };
   const rules = {
     id: 'required|hex|size:24'
   }
 
-  validate(req, res, params, rules, code, message, messageValidation, next);
+  validator.run(req.body, rules, {}, (err, status) => {
+    const result = err;
+    const code = 400;
+
+    if (!status) {
+      return Response.Error({ res, result, message, code });
+    } else {
+      next();
+    }
+  });
 }
