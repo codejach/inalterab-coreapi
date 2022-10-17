@@ -118,7 +118,6 @@ describe("Email signin user, tests.", () => {
         body.success.should.equal(true);
         body.message.should.equal('User updated.');
         body.correlation.should.to.have.lengthOf(36);
-        result.should.to.have.lengthOf(24);
 
         // end process
         done();
