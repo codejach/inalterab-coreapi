@@ -8,7 +8,7 @@ const router = Router();
 // Implementations
 router.delete('/:id', controller._delete);
 
-router.get('/', auth.verifyPermissions, controller._get);
+router.get('/', auth.verifyAccess, controller._get);
 
 router.post('/:id', controller._post);
 

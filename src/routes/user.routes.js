@@ -1,31 +1,21 @@
-import { Router } from 'express';
-import * as controller from '../controllers/user.controller';
-import * as auth from '../middlewares/auth/authjwt';
-import * as validate from '../middlewares/validation/user.validation';
+import { Router } from "express";
+import * as controller from "../controllers/user.controller";
+import * as auth from "../middlewares/auth/authjwt";
+import * as validate from "../middlewares/validation/user.validation";
 
 // Initialize
 const router = Router();
 
 // Implementations
-router.delete('/:id'
-  , [ auth.verifyPermissions, validate.del ]
-  , controller._delete);
+router.delete("/:id", [auth.verifyAccess, validate.del], controller._delete);
 
-router.get('/'
-  , [ auth.verifyPermissions, validate.get ]
-  , controller._get);
+router.get("/", [auth.verifyAccess, validate.get], controller._get);
 
-router.post('/' 
-  , [ auth.verifyPermissions, validate.post ]
-  , controller._post);
+router.post("/", [auth.verifyAccess, validate.post], controller._post);
 
-router.put('/:id'
-  , [ auth.verifyPermissions, validate.put ]
-  , controller._put);
+router.put("/:id", [auth.verifyAccess, validate.put], controller._put);
 
-router.get('/:id'
-  , [ auth.verifyPermissions, validate.getId ]
-  , controller.get);
+router.get("/:id", [auth.verifyAccess, validate.getId], controller.get);
 
-// Export default router 
+// Export default router
 export default router;

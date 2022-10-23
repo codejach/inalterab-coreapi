@@ -21,15 +21,19 @@ const getUserByToken = async (token) => {
     const user = await User.findOne(query).populate({
       path: 'roles',
       model: 'Role',
+      match: { 'enabled': true },
       populate: {
         path: 'access',
         model: 'Access',
+        match: { 'enabled': true },
         populate: {
           path: 'actions',
-          model: 'Action'
+          model: 'Action',
+          match: { 'enabled': true },
         }
       }
     }).exec();
+
     if (!user) { 
       return null;
     }
@@ -48,7 +52,8 @@ const getUserByToken = async (token) => {
  * @param {function}  next    Callback function
  * @return {Promise<object>} result  Result object
  */
-export const verifyPermissions = async (req, res, next) => {
+export const verifyAccess = async (req, res, next) => {
+  console.log(env);
   // Evaluate test environment
   if (env.notIsTestEnvironment) {
     // Constants
@@ -73,10 +78,11 @@ export const verifyPermissions = async (req, res, next) => {
     const path = req.route.path == '/' ? '' : req.route.path;
     const url = req.baseUrl + path;
     
-    const authorized = user.roles.some(role => 
-      role.access.some(access => 
-        access.actions.some(action => 
-          action.url === url && action.method === req.method)
+    const authorized = user.roles.some((role) =>
+      role.access.some((access) =>
+        access.actions.some(
+          (action) => action.url === url && action.method === req.method
+        )
       )
     );
     
