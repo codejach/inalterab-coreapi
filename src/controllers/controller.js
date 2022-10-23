@@ -141,14 +141,14 @@ export const CreateUser = async (params) => {
 };
 
 /**
- * Function to signup an user if it is valid.
+ * Function to signin an user if it is valid.
  *
  * @param {object}    req       Request
  * @param {object}    res       Response
  * @param {object}    user      User object
  * @return {object}   token     Token object
  */
-export const SignupUser = (params) => {
+export const SigninUser = (params) => {
   // Constants
   const { req, res, user } = params;
   const correlation = res.locals.correlation;

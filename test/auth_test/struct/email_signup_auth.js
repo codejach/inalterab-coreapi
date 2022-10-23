@@ -4,29 +4,41 @@
 const supertest = require('supertest');
 const should = require('chai').should();
 
-const userModel = require('../../models/UserTestModel');
+const createUserModel = require('../../models/CreateUserTestModel');
+const updateUserTestModel = require('../../models/UpdateUserTestModel');
+const userTestModel = require('../../models/UserTestModel');
 
-/*
- * Initializations
+/**
+ * Inititalizations
  */
 const server = supertest.agent('localhost:8080');
 
 /**
- * Email signup user, tests
+ * Signup user email, tests operations group
  */
 describe("Email signup user, tests.", () => {
+  // User created
+  var userCreated = null;
 
   /**
-   * Signup user by email | successful
+   * Create user | successfully
    */
-  describe("POST signup | Process successful", () => {
-    it("/auth/signup 200", done => {
+  describe("Create user | Process successful", () => {
+    it("/user 200", done => {
+      // update user models
+      const userModelUpdated = {
+        ...createUserModel,
+        login: {
+          ...createUserModel.login,
+          account: 'signin_test_user@testuser.com'
+        }
+      };
       
       // supertest request
-      server.post('/auth/signup')
+      server.post('/user')
 
         // body
-        .send(userModel)
+        .send(userModelUpdated)
 
         // headers
         .set('Accept-language', 'en')
@@ -51,7 +63,10 @@ describe("Email signup user, tests.", () => {
           body.success.should.equal(true);
           body.message.should.equal("User created.");
           body.correlation.should.to.have.lengthOf(36);
-          result.should.have.property('token').not.be.empty;
+          result.should.have.property('_id').with.lengthOf(24);
+
+          // Declarations
+          userCreated = result;
 
           // end async process
           done();  
@@ -61,255 +76,297 @@ describe("Email signup user, tests.", () => {
   });
 
   /**
-   * Signup user by email | Process failed by invalid email
+   * Update user | successfully
    */
-  describe("Post signup | Process failed by invalid email", () => {
-    it("/auth/signup 412", done => {
-
-      // updated model
+  describe("Update user password | Process successful", () => {
+    it("/user 200", done => {
+      // update user models
       const userModelUpdated = {
-        ...userModel,
-        account: 'text_user@wrongstructure'
+        ...updateUserTestModel,
+        login: {
+          ...updateUserTestModel.login,
+          account: 'signin_test_user@testuser.com'
+        }
       };
       
       // supertest request
-      server.post('/auth/signup')
+      server.put(`/user/${userCreated._id}`)
 
-        // body
-        .send(userModelUpdated)
+      // body
+      .send(userModelUpdated)
 
-        // headers
-        .set('Accept-language', 'en')
-        .set('Accept', 'application/json')
+      // headers
+      .set('Accept-language', 'en')
+      .set('Accept', 'application/json')
 
-        // expected http response content
-        .expect('Content-type', /json/)
+      // expected http response content
+      .expect('Content-type', /json/)
 
-        // expected http response code
-        .expect(412)
+      // expected http response code
+      .expect(200)
 
-        // async process
-        .then(res => {
+      // async process
+      .then(res => {
+        
+        // body response
+        const body = res.body;
 
-          // body response
-          const body = res.body;
+        // result response
+        const result = res.body.result;
 
-          // result response
-          const result = body.result;
+        // assertions
+        body.success.should.equal(true);
+        body.message.should.equal('User updated.');
+        body.correlation.should.to.have.lengthOf(36);
 
-          // assertions
-          body.success.should.equal(false);
-          body.message.should.equal("Invalid register, try again.");
-          body.correlation.should.to.have.lengthOf(36);
-          result.should.have.nested.property("errors.account");
-
-          // end async process
-          done();
-        })
-        .catch(err => done(err));
+        // end process
+        done();
+      })
+      .catch(err => done(err));
     });
   });
 
   /**
-   * Signup user by email | Process failed by invalid password
+   * Signin by email user | successfully
    */
-  describe("Post signup | Process failed by invalid password", () => {
-    it("/auth/signup 412", done => {
-      
-      // updated model
-      const userModelUpdated = {
-        ...userModel,
-        password: ''
+  describe("Signup by email user | Process successful", () => {
+    it("/auth/signup 200", done => {
+      // update user models
+      const updatedUserTestModel = {
+        ...userTestModel,
+        account: 'signin_test_user@testuser.com'
       };
 
       // supertest request
       server.post('/auth/signup')
 
-        // body
-        .send(userModelUpdated)
+      // body
+      .send(updatedUserTestModel)
 
-        // headers
-        .set('Accept-language', 'en')
-        .set('Accept', 'application/json')
+      // headers
+      .set('Accept-language', 'en')
+      .set('Accept', 'application/json')
 
-        // expected http response content
-        .expect('Content-type', /json/)
+      // expected http response content
+      .expect('Content-type', /json/)
 
-        // expected http response code
-        .expect(412)
+      // expected http response code
+      .expect(200)
 
-        // async process
-        .then(res => {
-          
-          // body response
-          const body = res.body;
+      // async process
+      .then(res => {
 
-          // result response
-          const result = body.result;
+        // body response
+        const body = res.body;
 
-          // assertions
-          body.success.should.equal(false);
-          body.message.should.equal("Invalid register, try again.");
-          body.correlation.should.to.have.lengthOf(36);
-          result.should.have.nested.property("errors.password");
+        // result response
+        const result = body.result;
 
-          // end async process
-          done();
-        })
-        .catch(err => done(err)); 
+        // assertions
+        body.success.should.equal(true);
+        body.correlation.should.to.have.lengthOf(36);
+        result.should.have.property('token').not.be.empty;
+
+        // end async process
+        done();
+      })
+      .catch(err => done(err));
     });
   });
 
   /**
-   * Signup user by email | Process failed by account param not supplied
+   * Signup by email user | Process failed by invalid email
    */
-  describe("Post signup | Process failed by account param not supplied", () => {
-    it("/auth/signup 421", done => {
-
-      // update model
-      const userModelUpdated = {
-        ...userModel,
-        account: null,
+  describe("Signup by email user | Process failed by invalid email", () => {
+    it("/auth/signup 401", done => {
+      // update user models
+      const updatedUserTestModel = {
+        ...userTestModel,
+        account: 'wrong_user@testuser.com'
       };
 
       // supertest request
       server.post('/auth/signup')
 
-        // body
-        .send(userModelUpdated)
+      // body
+      .send(updatedUserTestModel)
 
-        // headers
-        .set('Accept-language', 'en')
-        .set('Accept', 'application/json')
+      // headers
+      .set('Accept-language', 'en')
+      .set('Accept', 'application/json')
 
-        // expected http response content type
-        .expect('Content-type', /json/)
+      // expected http response content
+      .expect('Content-type', /json/)
 
-        // expected http response code
-        .expect(412)
+      // expected http response code
+      .expect(401)
 
-        // ansyc process
-        .then(res => {
-          
-          // body response
-          const body = res.body;
-          
-          // result response
-          const result = body.result;
+      // async process
+      .then(res => {
 
-          // assertions
-          body.success.should.equal(false);
-          body.message.should.equal('Invalid register, try again.');
-          body.correlation.should.to.have.lengthOf(36);
-          result.should.have.nested.property('errors.account');
+        // body response
+        const body = res.body;
 
-          // end async process
-          done();
-        })
-        .catch(err => done(err));
+        // result response
+        const result = body.result;
+
+        // assertions
+        body.success.should.equal(false);
+        body.correlation.should.to.have.lengthOf(36);
+        result.should.have.property('token', null);
+        result.should.have.property('user', null);
+
+        // end async process
+        done();
+      })
+      .catch(err => done(err));
     });
   });
 
   /**
-   * Signup user by email | Process failed by password param not supplied
+   * Signin by email user | Process failed by invalid password
    */
-  describe("Post signup | Process failed by password param not supplied", () => {
-    it("/auth/signup 421", done => {
-
-      // update model
-      const userModelUpdated = {
-        ...userModel,
-        password: null,
+  describe("Signup by email user | Process failed by invalid password", () => {
+    it("/auth/signup 401", done => {
+      // update user models
+      const updatedUserTestModel = {
+        ...userTestModel,
+        password: 'invalid_password'
       };
 
       // supertest request
       server.post('/auth/signup')
 
-        // body
-        .send(userModelUpdated)
+      // body
+      .send(updatedUserTestModel)
 
-        // headers
-        .set('Accept-language', 'en')
-        .set('Accept', 'application/json')
+      // headers
+      .set('Accept-language', 'en')
+      .set('Accept', 'application/json')
 
-        // expected http response content type
-        .expect('Content-type', /json/)
+      // expected http response content
+      .expect('Content-type', /json/)
 
-        // expected http response code
-        .expect(412)
+      // expected http response code
+      .expect(401)
 
-        // ansyc process
-        .then(res => {
-          
-          // body response
-          const body = res.body;
-          
-          // result response
-          const result = body.result;
+      // async process
+      .then(res => {
 
-          // assertions
-          body.success.should.equal(false);
-          body.message.should.equal('Invalid register, try again.');
-          body.correlation.should.to.have.lengthOf(36);
-          result.should.have.nested.property('errors.password');
+        // body response
+        const body = res.body;
 
-          // end async process
-          done();
-        })
-        .catch(err => done(err));
+        // result response
+        const result = body.result;
+
+        // assertions
+        body.success.should.equal(false);
+        body.correlation.should.to.have.lengthOf(36);
+        result.should.have.property('token', null);
+        result.should.have.property('user', null);
+
+        // end async process
+        done();
+      })
+      .catch(err => done(err));
     });
   });
 
   /**
-   * Signup user by email | Process failed by parameters not supplied
+   * Signin by email user | Process failed by email null
    */
-  describe("Post signup | Process failed by parameters not supplied.", () => {
-    it("/auth/signup 421", done => {
-
-      // update model
-      const userModelUpdated = {
-        ...userModel,
-        account: null,
-        password: null 
+  describe("Signup by email user | Process failed by email param not supplied",
+    () => {
+    it("/auth/signup 401", done => {
+      // update user models
+      const updatedUserTestModel = {
+        ...userTestModel,
+        account: null
       };
 
       // supertest request
       server.post('/auth/signup')
 
-        // body
-        .send(userModelUpdated)
+      // body
+      .send(updatedUserTestModel)
 
-        // headers
-        .set('Accept-language', 'en')
-        .set('Accept', 'application/json')
+      // headers
+      .set('Accept-language', 'en')
+      .set('Accept', 'application/json')
 
-        // expected http response content type
-        .expect('Content-type', /json/)
+      // expected http response content
+      .expect('Content-type', /json/)
 
-        // expected http response code
-        .expect(412)
+      // expected http response code
+      .expect(401)
 
-        // ansyc process
-        .then(res => {
-          
-          // body response
-          const body = res.body;
-          
-          // result response
-          const result = body.result;
+      // async process
+      .then(res => {
 
-          // assertions
-          body.success.should.equal(false);
-          body.message.should.equal('Invalid register, try again.');
-          body.correlation.should.to.have.lengthOf(36);
-          result.should.have.property('errors')
-            .and.to.have.all.keys('account', 'password');
+        // body response
+        const body = res.body;
 
-          // end async process
-          done();
-        })
-        .catch(err => done(err));
+        // result response
+        const result = body.result;
+
+        // assertions
+        body.success.should.equal(false);
+        body.correlation.should.to.have.lengthOf(36);
+        result.should.have.nested.property('errors.account');
+
+        // end async process
+        done();
+      })
+      .catch(err => done(err));
     });
   });
 
-});
+  /**
+   * Signin by email user | Process failed by pasword null
+   */
+  describe("Signup by email user | Process failed by password param not supplied", 
+    () => {
+    it("/auth/signup 401", done => {
+      // update user models
+      const updatedUserTestModel = {
+        ...userTestModel,
+        password: null
+      };
+
+      // supertest request
+      server.post('/auth/signup')
+
+      // body
+      .send(updatedUserTestModel)
+
+      // headers
+      .set('Accept-language', 'en')
+      .set('Accept', 'application/json')
+
+      // expected http response content
+      .expect('Content-type', /json/)
+
+      // expected http response code
+      .expect(401)
+
+      // async process
+      .then(res => {
+
+        // body response
+        const body = res.body;
+
+        // result response
+        const result = body.result;
+
+        // assertions
+        body.success.should.equal(false);
+        body.correlation.should.to.have.lengthOf(36);
+        result.should.have.nested.property('errors.password');
+
+        // end async process
+        done();
+      })
+      .catch(err => done(err));
+    });
+  });
+})

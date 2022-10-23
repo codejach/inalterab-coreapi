@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config';
 import cons from '../locales/constants';
 import Response from '../libs/response';
-import { CreateUser, SignupUser } from './controller';
+import { CreateUser, SigninUser } from './controller';
 import User from '../models/user';
 
 /**
@@ -59,7 +59,7 @@ const evaluateUser = async (req, res, record) => {
  * @param {object}    res     Response
  * @return {Promise<object>} result  Result object
  */
-export const signin = async (req, res) => {
+export const signup = async (req, res) => {
   // Exist user?
   const record = await User.findOne({ 'login.account': req.body.account });
 
@@ -74,7 +74,7 @@ export const signin = async (req, res) => {
  * @param {object}    res     Response
  * @return {Promise<object>} result  Result object
  */
-export const signinEth = async (req, res) => {
+export const signupEth = async (req, res) => {
   // Set password for ethereum accounts
   req.body.password = req.body.account;
 
@@ -95,7 +95,7 @@ export const signinEth = async (req, res) => {
  * @param {object}    res     Response
  * @return {Promise<object>} result  Result object
  */
-export const signup = async (req, res) => {
+export const signin = async (req, res) => {
   // Fields
   const { account, password } = req.body;
 
@@ -114,7 +114,7 @@ export const signup = async (req, res) => {
   }
 
   // Signup user
-  const result = SignupUser({ req, res, user: user.result });
+  const result = SigninUser({ req, res, user: user.result });
 
   // Return result
   Response.Set({ res, ...result });
@@ -127,7 +127,7 @@ export const signup = async (req, res) => {
  * @param {object}    res     Response
  * @return {Promise<object>} result  Result object
  */
-export const signupEth = async (req, res) => {
+export const signinEth = async (req, res) => {
   // Fields
   const { account } = req.body;
 
@@ -147,7 +147,7 @@ export const signupEth = async (req, res) => {
   }
  
   // Signup user
-  const result = SignupUser({ req, res, user: user.result });
+  const result = SigninUser({ req, res, user: user.result });
 
   // Return result
   Response.Set({ res, ...result });

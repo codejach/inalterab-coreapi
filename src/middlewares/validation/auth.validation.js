@@ -12,7 +12,7 @@ import cons from '../../locales/constants';
  */
 export const signin = async (req, res, next) => {
   const validator = new ValidatorService(req, res);
-  const message = req.t(cons.authentication_failed);
+  const message = req.t(cons.invalid_register);
   const rules = {
     account: 'required|email',
     password: 'required|string|min:6'
@@ -20,7 +20,7 @@ export const signin = async (req, res, next) => {
 
   validator.run(req.body, rules, {}, (err, status) => {
     const result = err;
-    const code = 401;
+    const code = 412;
 
     if (!status) {
       return Response.Error({ res, result, message, code });
@@ -41,13 +41,13 @@ export const signin = async (req, res, next) => {
  */
 export const signinEth = async (req, res, next) => {
   const validator = new ValidatorService(req, res);
-  const message = req.t(cons.authentication_failed);
+  const message = req.t(cons.invalid_register);
   const validationMessage = req.t(cons.invalid_eth_address);
   const rules = { account: 'required|ethereumAddress' };
 
   validator.run(req.body, rules, validationMessage, (err, status) => {
     const result = err;
-    const code = 401;
+    const code = 412;
 
     if (!status) {
       return Response.Error({ res, result, message, code });
@@ -67,7 +67,7 @@ export const signinEth = async (req, res, next) => {
  */
 export const signup = async (req, res, next) => {
   const validator = new ValidatorService(req, res);
-  const message = req.t(cons.invalid_register);
+  const message = req.t(cons.authentication_failed);
   const rules = {
     'account': 'required|email',
     'password': 'required|string|min:6'
@@ -75,7 +75,7 @@ export const signup = async (req, res, next) => {
 
   validator.run(req.body, rules, {}, (err, status) => {
     const result = err;
-    const code = 412;
+    const code = 401;
 
     if (!status) {
       return Response.Error({ res, result, message, code });
@@ -96,13 +96,13 @@ export const signup = async (req, res, next) => {
  */
 export const signupEth = async (req, res, next) => {
   const validator = new ValidatorService(req, res);
-  const message = req.t(cons.invalid_register);
   const validationMessage = req.t(cons.invalid_eth_address);
+  const message = req.t(cons.authentication_failed);
   const rules = { account: 'required|ethereumAddress' };
 
   validator.run(req.body, rules, validationMessage, (err, status) => {
     const result = err;
-    const code = 412;
+    const code = 401;
 
     if (!status) {
       Response.Error({ res, result, message, code });

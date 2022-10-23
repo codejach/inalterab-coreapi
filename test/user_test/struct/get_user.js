@@ -24,10 +24,10 @@ describe("Get user, test group.", () => {
    * Get user
    */
   describe("Get user, test group.", () => {
-    it("/auth/signin", done => {
+    it("/auth/signup", done => {
 
       // super test request
-      server.post('/auth/signin')
+      server.post('/auth/signup')
         
         // body
         .send(userTestModel)

@@ -12,18 +12,18 @@ const ethModel = require('../../models/EthereumTestModel');
 const server = supertest.agent('localhost:8080');
 
 /**
- * Email signup user, tests
+ * Email signin user, tests
  */
-describe("ETH signup user, tests.", () => {
+describe("ETH signin user, tests.", () => {
 
   /**
-   * Signup user by eth account | successful
+   * Signin user by eth account | successful
    */
-  describe("POST signup | Process successful", () => {
-    it("/auth/signup/eth 200", done => {
+  describe("POST signin | Process successful", () => {
+    it("/auth/signin/eth 200", done => {
       
       // supertest request
-      server.post('/auth/signup/eth')
+      server.post('/auth/signin/eth')
 
         // body
         .send(ethModel)
@@ -61,10 +61,10 @@ describe("ETH signup user, tests.", () => {
   });
 
   /**
-   * Signup user by eth account | Process failed by invalid account 
+   * Signin user by eth account | Process failed by invalid account 
    */
-  describe("Post signup | Process failed by invalid account", () => {
-    it("/auth/signup/eth 412", done => {
+  describe("Post signin | Process failed by invalid account", () => {
+    it("/auth/signin/eth 412", done => {
 
       // updated model
       const ethModelUpdated = {
@@ -73,7 +73,7 @@ describe("ETH signup user, tests.", () => {
       };
       
       // supertest request
-      server.post('/auth/signup/eth')
+      server.post('/auth/signin/eth')
 
         // body
         .send(ethModelUpdated)
@@ -111,10 +111,10 @@ describe("ETH signup user, tests.", () => {
   });
 
   /**
-   * Signup user by email accoun | Process failed by account param not supplied
+   * Signin user by email accoun | Process failed by account param not supplied
    */
-  describe("Post signup | Process failed by account param not supplied", () => {
-    it("/auth/signup/eth 421", done => {
+  describe("Post signin | Process failed by account param not supplied", () => {
+    it("/auth/signin/eth 421", done => {
 
       // update model
       const ethModelUpdated = {
@@ -123,7 +123,7 @@ describe("ETH signup user, tests.", () => {
       };
 
       // supertest request
-      server.post('/auth/signup/eth')
+      server.post('/auth/signin/eth')
 
         // body
         .send(ethModelUpdated)
