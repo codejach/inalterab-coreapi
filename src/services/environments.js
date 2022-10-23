@@ -2,20 +2,17 @@ import 'dotenv/config';
 import config from '../config';
 
 /**
- * Function to validate if the asigned roles to user are valid based into
- * current environment.
+ * Function to validate if the current environment is test
  *
- * @param {object}   roles   Array roles
- * @return {boolean}  result  result
+ * @returns boolean
  */
 const itIsTestEnvironment = () => {
-  return testEnvironments.includes(config.INITIAL_TEST_ENVIRONMENTS);
+  return process.env.ENVIRONMENT.includes(config.INITIAL_TEST_ENVIRONMENTS);
 }
 
 export default {
-  notIsTestEnvironment: (
-    !itIsTestEnvironment || (itIsTestEnvironment && config.SIMULATE_PROD)
-  ),
-  isTestEnvironment: itIsTestEnvironment && !config.SIMULATE_PROD,
-  config
-}
+  notIsTestEnvironment:
+    (itIsTestEnvironment() && config.SIMULATE_PROD) || !itIsTestEnvironment(), 
+  isTestEnvironment: itIsTestEnvironment() && !config.SIMULATE_PROD,
+  config,
+};
