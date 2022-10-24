@@ -33,3 +33,6 @@ package-lock.json
 .env.test.local
 .env.production.local
 .env.local
+
+test/permission_test/struct/access.js
+test/permission_test/struct/action.js
