@@ -6,6 +6,7 @@ export default {
       access: [
         'home_manager_type00',
         'user_manager_type00',
+        'permission_manager_type00',
       ],
       enabled: true 
     },

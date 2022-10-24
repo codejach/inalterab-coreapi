@@ -7,10 +7,12 @@ export default {
   ...config.BASE || [],
   INITIAL_ACCESS: [
     ...config.INITIAL_ACCESS || [],
+    ...config.ADMIN_ACCESS || [],
     ...config.OTHER_ACCESS || []
   ],
   INITIAL_MODULES: [
     ...config.INITIAL_MODULES || [],
+    ...config.ADMIN_MODULES || [],
     ...config.OTHER_MODULES || []
   ],
   INITIAL_EXCLUSIVE_ROLES: [
@@ -27,5 +29,5 @@ export default {
     'dev'
   ],
   SECRET:'core-api',
-  SIMULATE_PROD: false 
+  SIMULATE_PROD: false, 
 }
