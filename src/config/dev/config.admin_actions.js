@@ -12,6 +12,18 @@ export default {
         'permission_update'
       ]
     },
+    {
+      name: 'access_manager_type00',
+      description: 'Access manager administration options.',
+      enabled: true,
+      actions: [
+        'access_byAccess',
+        'access_list',
+        'access_delete',
+        'access_create',
+        'access_update'
+      ]
+    },
   ],
   ADMIN_MODULES: [
     { 
@@ -54,6 +66,47 @@ export default {
           enabled: true
         },
       ]
-    }
+    },
+    { 
+      name: 'access_page',
+      description: 'Access page module.',
+      actions: [
+        {
+          name: 'access_list', 
+          description: 'Access list.', 
+          url: '/auth/access',
+          method: 'GET',
+          enabled: true
+        },
+        {
+          name: 'access_delete', 
+          description: 'Access delete.',
+          url: '/auth/access/:id',
+          method: 'DELETE',
+          enabled: true
+        },
+        {
+          name: 'access_create', 
+          description: 'Access create.', 
+          url: '/auth/access',
+          method: 'POST',
+          enabled: true
+        },
+        {
+          name: 'access_update', 
+          description: 'Access update.', 
+          url: '/auth/access/:id',
+          method: 'PUT',
+          enabled: true
+        },
+        {
+          name: 'access_byRole', 
+          description: 'Access by Role.', 
+          url: '/auth/access/:access',
+          method: 'GET',
+          enabled: true
+        },
+      ]
+    },
   ]
 }

@@ -1,4 +1,19 @@
+import Access from "../models/access";
 import Role from "../models/role";
+
+export const getAccess = async (params = {}) => {
+  try {
+    const model = await Access.find(params).exec();
+
+    if (!model) {
+      return null;
+    }
+
+    return model;
+  } catch (_) {
+    return null;
+  }
+}
 
 export const getRoles = async (params = {}) => {
   try {
