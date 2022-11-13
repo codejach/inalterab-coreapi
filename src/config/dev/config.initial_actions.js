@@ -8,6 +8,7 @@ export default {
         'user_manager_type00',
         'permission_manager_type00',
         'access_manager_type00',
+        'action_manager_type00',
       ],
       enabled: true 
     },

@@ -9,10 +9,10 @@ describe("Get action", () => {
   var signed_user = { user: { _id : null }};
 
   describe("Get user, test group.", () => {
-    it("/auth/signin", done => {
+    it("/auth/signup", done => {
 
       // super test request
-      server.post('/auth/signin')
+      server.post('/auth/signup')
         
         // body
         .send(userTestModel)
@@ -56,6 +56,47 @@ describe("Get action", () => {
     it("/auth/action", done => {
       
       server.get("/auth/action")
+
+      // header
+      .set("Authorization", signed_user.token)
+      .set('Accept-language', 'en')
+      .set('Accept', 'application/json')
+
+      // expected http response content
+      .expect('Content-type',/json/)
+
+      // expected http response code
+      .expect(200)
+
+      // async process
+      .then(res => {
+        // body response
+        const body = res.body;
+        
+        // result response
+        const result = res.body.result;
+
+        // assertions
+        body.success.should.equal(true);
+        result.should.be.an('array');
+
+        result.forEach((action) => {
+          console.log(action);
+        });
+
+        // end async process
+        done();
+      })
+      .catch(err => done(err));
+    });
+  });
+
+  describe("Get action by access.", () => {
+    const actionId= '637040c2c968291cdf751be5';
+
+    it(`/auth/action/${actionId}`, done => {
+      
+      server.get(`/auth/action/${actionId}`)
 
       // header
       .set("Authorization", signed_user.token)
