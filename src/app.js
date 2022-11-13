@@ -6,6 +6,7 @@ import i18nextMiddleware from "i18next-http-middleware";
 import i18backend from "i18next-fs-backend";
 import * as setup from "./libs/initialSetup";
 import { controller } from "./controllers/controller";
+import access from "./routes/access.routes";
 import auth from "./routes/auth.routes";
 import home from "./routes/home.routes";
 import permission from "./routes/permission.routes";
@@ -53,6 +54,7 @@ app.use(controller);
 // Routes
 app.use("/", home);
 app.use("/", utility);
+app.use("/auth", access);
 app.use("/auth", permission);
 app.use("/auth", auth);
 app.use("/user", user);

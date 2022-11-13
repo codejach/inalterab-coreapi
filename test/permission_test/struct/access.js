@@ -9,10 +9,10 @@ describe("Get access", () => {
   var signed_user = { user: { _id : null }};
 
   describe("Get user, test group.", () => {
-    it("/auth/signin", done => {
+    it("/auth/signup", done => {
 
       // super test request
-      server.post('/auth/signin')
+      server.post('/auth/signup')
         
         // body
         .send(userTestModel)
