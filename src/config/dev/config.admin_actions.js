@@ -24,6 +24,18 @@ export default {
         'access_update'
       ]
     },
+    {
+      name: 'action_manager_type00',
+      description: 'Action manager administration options.',
+      enabled: true,
+      actions: [
+        'action_byAccess',
+        'action_list',
+        'action_delete',
+        'action_create',
+        'action_update'
+      ]
+    },
   ],
   ADMIN_MODULES: [
     { 
@@ -103,6 +115,47 @@ export default {
           name: 'access_byRole', 
           description: 'Access by Role.', 
           url: '/auth/access/:access',
+          method: 'GET',
+          enabled: true
+        },
+      ]
+    },
+    { 
+      name: 'action_page',
+      description: 'Action page module.',
+      actions: [
+        {
+          name: 'action_list', 
+          description: 'Action list.', 
+          url: '/auth/action',
+          method: 'GET',
+          enabled: true
+        },
+        {
+          name: 'action_delete', 
+          description: 'Action delete.',
+          url: '/auth/action/:id',
+          method: 'DELETE',
+          enabled: true
+        },
+        {
+          name: 'action_create', 
+          description: 'Action create.', 
+          url: '/auth/action',
+          method: 'POST',
+          enabled: true
+        },
+        {
+          name: 'action_update', 
+          description: 'Action update.', 
+          url: '/auth/action/:id',
+          method: 'PUT',
+          enabled: true
+        },
+        {
+          name: 'action_byAccess', 
+          description: 'Action by Access.', 
+          url: '/auth/action/:access',
           method: 'GET',
           enabled: true
         },
